@@ -17,9 +17,12 @@ func main() {
 	// registro una ruta y un handler
 	r.Get("/ping", h.Ping())
 
-	r.Get("/products", h.GetAll)
-	r.Get("/products/{id}", h.GetById)
-	r.Get("/products/search", h.ProductSearch)
+	// agrego Route para agrupar rutas
+	r.Route("/products", func(r chi.Router) {
+		r.Get("/", h.GetAll)
+		r.Get("/{id}", h.GetById)
+		r.Get("/search", h.ProductSearch)
+	})
 
 	// paso la url de esta forma http://localhost:8080/users?id=1
 

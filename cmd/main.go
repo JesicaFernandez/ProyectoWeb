@@ -1,41 +1,25 @@
 package main
 
 import (
-	"app/cmd/handlers"
-	"net/http"
-	"github.com/go-chi/chi/v5"
+	"app/internal/application"
 	"fmt"
+	"os"
 )
 
 func main() {
-	
-	// agrego las dependencias
-	db, err := handlers.LoadProducts("products.json")
-	if err != nil {
+	//app config
+	// - set auth token as env var
+	if err := os.Setenv("AUTH_TOKEN", "a1b2c3d4"); err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	// creo un controller de products
-	hc := handlers.NewControllerProducts(db, len(db))
+	// - create the app
+	app := application.NewDefaultHTTP(":8080", os.Getenv("AUTH_TOKEN"))
 
-	// creo un router
-	r := chi.NewRouter()
-
-	// registro una ruta y un handler
-	r.Get("/ping", hc.Ping())
-
-	// agrego Route para agrupar rutas
-	r.Route("/products", func(r chi.Router) {
-		r.Get("/", hc.Get())
-		r.Get("/{id}", hc.GetById())
-		r.Get("/search", hc.ProductSearch())
-		r.Post("/", hc.Save())
-	})
-
-	// paso la url de esta forma http://localhost:8080/users?id=1
-
-	// inicio el servidor web en el puerto 8080
-	http.ListenAndServe(":8080", r)
-
+	//run
+	if err := app.Run(); err != nil {
+		fmt.Println(err)
+		return
+	}
 }

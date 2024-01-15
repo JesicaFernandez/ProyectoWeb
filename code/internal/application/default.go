@@ -33,7 +33,8 @@ func (d *Default) Run() (err error) {
 	rt := chi.NewRouter()
 
 	// agrego rutas
-	rt.Post("/movies", hd.Save())
+	rt.Post("/product", hd.Save())
+	rt.Get("/products/{id}", hd.GetById())
 
 	err = http.ListenAndServe(d.addr, rt)
 	return

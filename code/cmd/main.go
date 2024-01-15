@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
-	"code/internal/application"
+	"app/internal/application"
 )
 
 func main() {
 	
-	app := application.NewServer("localhost:8080")
+	app := application.NewDefault(":8080")
 
 	if err := app.Run(); err != nil {
 		fmt.Println(err)
+		return 
 	}
 
 }

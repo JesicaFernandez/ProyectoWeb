@@ -97,3 +97,23 @@ func LoadProducts(filename string) (p map[int]*Product, err error) {
 	}
 	return
 }
+
+// Función para validar que el ID sea único
+func IsUniqueID(id int, storage map[int]*Product) bool {
+	for _, p := range storage {
+		if p.Id == id {
+			return false
+		}
+	}
+	return true
+}
+
+// Función para validar que el CodeValue sea único
+func IsUniqueCodeValue(codeValue string, storage map[int]*Product) bool {
+	for _, p := range storage {
+		if p.CodeValue == codeValue {
+			return false
+		}
+	}
+	return true
+}

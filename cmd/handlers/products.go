@@ -258,38 +258,34 @@ func (c *ControllerProducts) Save() http.HandlerFunc {
 		}	
 
 		// valido que el id sea unico
-		for _, v := range c.storage {
-			if v.Id == product.Id {
-				code := http.StatusConflict
-				body := ResponseBodyProductSave{
-					Message: 	"product already exists",
-					Data: 		nil,
-				}
-				w.Header().Set("Content-Type", "application/json")
-				w.WriteHeader(code)
-				json.NewEncoder(w).Encode(body)
-				return
+
+		/*if !IsUniqueID(product.Id, c.storage) {
+			code := http.StatusConflict
+			body := ResponseBodyProductSave{
+				Message: "Product with ID already exists",
+				Data:    nil,
 			}
-		}
+			w.Header().Set("Content-Type", "text/plain")
+			w.WriteHeader(code)
+			json.NewEncoder(w).Encode(body)
+			return
+		}*/
 
 		c.lastId++
 		c.storage[c.lastId] = product	
-		
+
 		// valido que el code_value sea unico por product
-		
-		for _, v := range c.storage {
-			if v.CodeValue == product.CodeValue {
-				code := http.StatusConflict
-				body := ResponseBodyProductSave{
-					Message: 	"code_value in product already exists",
-					Data: 		nil,
-				}
-				w.Header().Set("Content-Type", "application/json")
-				w.WriteHeader(code)
-				json.NewEncoder(w).Encode(body)
-				return
+		/*if !IsUniqueCodeValue(product.CodeValue, c.storage) {
+			code := http.StatusConflict
+			body := ResponseBodyProductSave{
+				Message: "Product with CodeValue already exists",
+				Data:    nil,
 			}
-		}
+			w.Header().Set("Content-Type", "text/plain")
+			w.WriteHeader(code)
+			json.NewEncoder(w).Encode(body)
+			return
+		}*/
 		// response ----------------------------------
 
 		code := http.StatusCreated

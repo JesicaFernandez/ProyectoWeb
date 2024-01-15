@@ -33,7 +33,7 @@ var (
 	ErrorValidateQualityField = errors.New("validate quantity field")
 )
 
-func Validate(p Product) (err error) {
+func Validate(p *Product) (err error) {
 	if p.Name == "" {
 		err = fmt.Errorf("%w: name", ErrValidateRequiredField)
 		return

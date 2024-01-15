@@ -9,7 +9,7 @@ import (
 )
 
 type ControllerProducts struct {
-	storage map[int] *Product
+	storage map[int]*Product
 	lastId int
 }
 
@@ -52,7 +52,7 @@ type ResponseBodyProductSearch struct {
 	Data 		[]*ProductJSON 	`json:"data"`
 }
 
-func NewControllerProducts(storage map[int] *Product, lastId int) *ControllerProducts {
+func NewControllerProducts(storage map[int]*Product, lastId int) *ControllerProducts {
 	return &ControllerProducts{
 		storage: storage,
 		lastId: lastId,
@@ -245,7 +245,7 @@ func (c *ControllerProducts) Save() http.HandlerFunc {
 		}
 
 		// validamos 
-		if err := Validate(*product); err != nil {
+		if err := Validate(product); err != nil {
 			code := http.StatusConflict
 			body := ResponseBodyProductSave{
 				Message: 	"invalid product",

@@ -1,27 +1,36 @@
 package main
 
 import (
-	"app/code/cmd/handlers"
+	"app/cmd/handlers"
 	"net/http"
 	"github.com/go-chi/chi/v5"
+	"fmt"
 )
 
 func main() {
 	
+	// agrego las dependencias
+	db, err := handlers.LoadProducts("products.json")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// creo un controller de products
+	hc := handlers.NewControllerProducts(db, len(db))
+
 	// creo un router
 	r := chi.NewRouter()
 
-	// creo un handler de productos
-	h := handler.NewProduct()
-
 	// registro una ruta y un handler
-	r.Get("/ping", h.Ping())
+	r.Get("/ping", hc.Ping())
 
 	// agrego Route para agrupar rutas
 	r.Route("/products", func(r chi.Router) {
-		r.Get("/", h.GetAll)
-		r.Get("/{id}", h.GetById)
-		r.Get("/search", h.ProductSearch)
+		r.Get("/", hc.Get())
+		r.Get("/{id}", hc.GetById())
+		r.Get("/search", hc.ProductSearch())
+		r.Post("/", hc.Save())
 	})
 
 	// paso la url de esta forma http://localhost:8080/users?id=1

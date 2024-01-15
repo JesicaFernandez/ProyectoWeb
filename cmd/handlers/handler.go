@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 	"errors"
-	"regexp"
 	"os"
 )
 
@@ -57,11 +56,6 @@ func Validate(p *Product) (err error) {
 	}
 	if p.Expiration.Before(time.Now()) {
 		err = fmt.Errorf("%w: expiration", ErrorValidateQualityField)
-		return
-	}
-	rx := regexp.MustCompile(`^[A.Z]{3}-[0-9]{3}$`)
-	if !rx.MatchString(p.CodeValue) {
-		err = fmt.Errorf("%w: code_value", ErrorValidateQualityField)
 		return
 	}
 	return
